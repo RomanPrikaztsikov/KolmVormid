@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -22,6 +22,8 @@ namespace KolmVormid
         private Image _originalImage;
         private Button rotateButton;
         private Button pixelateButton;
+        private Button saveButton;
+        private SaveFileDialog saveFileDialog1;
 
         public Vorm1()
         {
@@ -41,11 +43,13 @@ namespace KolmVormid
             resizeButton = new Button();
             closeButton = new Button();
             rotateButton = new Button();
+            saveButton = new Button();
             flowLayoutPanel2 = new FlowLayoutPanel();
             checkBox1 = new CheckBox();
             checkBox2 = new CheckBox();
             openFileDialog1 = new OpenFileDialog();
             colorDialog1 = new ColorDialog();
+            saveFileDialog1 = new SaveFileDialog();
 
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(pictureBox1)).BeginInit();
@@ -53,7 +57,6 @@ namespace KolmVormid
             flowLayoutPanel2.SuspendLayout();
             SuspendLayout();
 
-            // tableLayoutPanel1
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 85F));
@@ -70,7 +73,6 @@ namespace KolmVormid
             tableLayoutPanel1.TabIndex = 0;
             tableLayoutPanel1.Paint += tableLayoutPanel1_Paint;
 
-            // pictureBox1
             tableLayoutPanel1.SetColumnSpan(pictureBox1, 2);
             pictureBox1.Dock = DockStyle.Fill;
             pictureBox1.Location = new Point(3, 3);
@@ -79,7 +81,7 @@ namespace KolmVormid
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
 
-            // flowLayoutPanel1
+            flowLayoutPanel1.Controls.Add(saveButton);
             flowLayoutPanel1.Controls.Add(pixelateButton);
             flowLayoutPanel1.Controls.Add(showButton);
             flowLayoutPanel1.Controls.Add(clearButton);
@@ -94,8 +96,15 @@ namespace KolmVormid
             flowLayoutPanel1.Size = new Size(661, 51);
             flowLayoutPanel1.TabIndex = 2;
 
-            // pixelateButton
-            pixelateButton.Location = new Point(583, 3);
+            saveButton.Location = new Point(583, 3);
+            saveButton.Name = "saveButton";
+            saveButton.Size = new Size(75, 23);
+            saveButton.TabIndex = 7;
+            saveButton.Text = "Save";
+            saveButton.UseVisualStyleBackColor = true;
+            saveButton.Click += saveButton_Click;
+
+            pixelateButton.Location = new Point(502, 3);
             pixelateButton.Name = "pixelateButton";
             pixelateButton.Size = new Size(75, 23);
             pixelateButton.TabIndex = 6;
@@ -103,9 +112,8 @@ namespace KolmVormid
             pixelateButton.UseVisualStyleBackColor = true;
             pixelateButton.Click += pixelateButton_Click;
 
-            // showButton
             showButton.AutoSize = true;
-            showButton.Location = new Point(489, 3);
+            showButton.Location = new Point(408, 3);
             showButton.Name = "showButton";
             showButton.Size = new Size(88, 23);
             showButton.TabIndex = 0;
@@ -113,9 +121,8 @@ namespace KolmVormid
             showButton.UseVisualStyleBackColor = true;
             showButton.Click += showButton_Click;
 
-            // clearButton
             clearButton.AutoSize = true;
-            clearButton.Location = new Point(389, 3);
+            clearButton.Location = new Point(308, 3);
             clearButton.Name = "clearButton";
             clearButton.Size = new Size(94, 23);
             clearButton.TabIndex = 1;
@@ -123,9 +130,8 @@ namespace KolmVormid
             clearButton.UseVisualStyleBackColor = true;
             clearButton.Click += clearButton_Click;
 
-            // backgroundButton
             backgroundButton.AutoSize = true;
-            backgroundButton.Location = new Point(246, 3);
+            backgroundButton.Location = new Point(165, 3);
             backgroundButton.Name = "backgroundButton";
             backgroundButton.Size = new Size(137, 23);
             backgroundButton.TabIndex = 2;
@@ -133,9 +139,8 @@ namespace KolmVormid
             backgroundButton.UseVisualStyleBackColor = true;
             backgroundButton.Click += backgroundButton_Click;
 
-            // resizeButton
             resizeButton.AutoSize = true;
-            resizeButton.Location = new Point(165, 3);
+            resizeButton.Location = new Point(84, 3);
             resizeButton.Name = "resizeButton";
             resizeButton.Size = new Size(75, 23);
             resizeButton.TabIndex = 4;
@@ -143,9 +148,8 @@ namespace KolmVormid
             resizeButton.UseVisualStyleBackColor = true;
             resizeButton.Click += resizeButton_Click;
 
-            // closeButton
             closeButton.AutoSize = true;
-            closeButton.Location = new Point(84, 3);
+            closeButton.Location = new Point(3, 3);
             closeButton.Name = "closeButton";
             closeButton.Size = new Size(75, 23);
             closeButton.TabIndex = 3;
@@ -153,15 +157,13 @@ namespace KolmVormid
             closeButton.UseVisualStyleBackColor = true;
             closeButton.Click += closeButton_Click;
 
-            // rotateButton
-            rotateButton.Location = new Point(3, 3);
+            rotateButton.Location = new Point(3, 32);
             rotateButton.Name = "rotateButton";
             rotateButton.Size = new Size(75, 23);
             rotateButton.TabIndex = 5;
             rotateButton.Text = "Rotate";
             rotateButton.Click += rotateButton_Click;
 
-            // flowLayoutPanel2
             flowLayoutPanel2.Controls.Add(checkBox1);
             flowLayoutPanel2.Controls.Add(checkBox2);
             flowLayoutPanel2.FlowDirection = FlowDirection.TopDown;
@@ -170,7 +172,6 @@ namespace KolmVormid
             flowLayoutPanel2.Size = new Size(111, 51);
             flowLayoutPanel2.TabIndex = 3;
 
-            // checkBox1
             checkBox1.AutoSize = true;
             checkBox1.Location = new Point(3, 3);
             checkBox1.Name = "checkBox1";
@@ -180,7 +181,6 @@ namespace KolmVormid
             checkBox1.UseVisualStyleBackColor = true;
             checkBox1.CheckedChanged += checkBox1_CheckedChanged_1;
 
-            // checkBox2
             checkBox2.AutoSize = true;
             checkBox2.Location = new Point(3, 26);
             checkBox2.Name = "checkBox2";
@@ -190,12 +190,13 @@ namespace KolmVormid
             checkBox2.UseVisualStyleBackColor = true;
             checkBox2.CheckedChanged += checkBox2_CheckedChanged;
 
-            // openFileDialog1
             openFileDialog1.FileName = "openFileDialog1";
-            openFileDialog1.Filter = "All files (*.*)|*.*|JPEG Files (*.jpg)|*.jpg|GIF Files (*.gif)|*.gif|PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp";
+            openFileDialog1.Filter = "All files (*.*)|*.*|JPEG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png";
             openFileDialog1.Title = "Select a picture file";
 
-            // Vorm1
+            saveFileDialog1.Filter = "PNG Image|*.png|JPEG Image|*.jpg";
+            saveFileDialog1.Title = "Salvesta pilt";
+
             ClientSize = new Size(784, 561);
             Controls.Add(tableLayoutPanel1);
             Name = "Vorm1";
@@ -245,7 +246,6 @@ namespace KolmVormid
             pictureBox1.SizeMode = checkBox1.Checked ? PictureBoxSizeMode.StretchImage : PictureBoxSizeMode.Normal;
         }
 
-        //filter
         private Image ApplyFilter(Image image)
         {
             var newImage = new Bitmap(image);
@@ -267,20 +267,16 @@ namespace KolmVormid
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             if (pictureBox1.Image == null) return;
-
             if (checkBox2.Checked)
                 pictureBox1.Image = ApplyFilter(pictureBox1.Image);
             else
                 pictureBox1.Image = _originalImage;
         }
 
-
-        //resize
         private bool isResized = false;
         private void resizeButton_Click(object sender, EventArgs e)
         {
             if (_originalImage == null) return;
-
             if (!isResized)
             {
                 int newWidth = _originalImage.Width / 2;
@@ -297,23 +293,17 @@ namespace KolmVormid
             }
         }
 
-
-        //rotate
         private void rotateButton_Click(object sender, EventArgs e)
         {
             if (pictureBox1.Image == null) return;
-
             pictureBox1.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
             pictureBox1.Refresh();
         }
 
-
-        //pixelate
         private bool isPixelated = false;
         private void pixelateButton_Click(object sender, EventArgs e)
         {
             if (_originalImage == null) return;
-
             if (!isPixelated)
             {
                 int pixelationSize = 64;
@@ -332,25 +322,41 @@ namespace KolmVormid
         private Image PixelateImage(Image original, int pixelationSize)
         {
             if (original == null) return null;
-
             Bitmap small = new Bitmap(pixelationSize, pixelationSize);
-
             using (Graphics g = Graphics.FromImage(small))
             {
                 g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                 g.DrawImage(original, 0, 0, pixelationSize, pixelationSize);
             }
-
             Bitmap pixelated = new Bitmap(original.Width, original.Height);
-
             using (Graphics g = Graphics.FromImage(pixelated))
             {
                 g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                 g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
                 g.DrawImage(small, 0, 0, original.Width, original.Height);
             }
-
             return pixelated;
+        }
+
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            if (pictureBox1.Image == null)
+            {
+                MessageBox.Show("Pilt puudub!", "Viga", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                var filePath = saveFileDialog1.FileName;
+                var format = System.Drawing.Imaging.ImageFormat.Png;
+
+                if (filePath.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase))
+                    format = System.Drawing.Imaging.ImageFormat.Jpeg;
+
+                pictureBox1.Image.Save(filePath, format);
+                MessageBox.Show("Pilt salvestatud!", "Valmis", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }
